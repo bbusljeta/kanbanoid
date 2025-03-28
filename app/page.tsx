@@ -1,103 +1,75 @@
-import Image from "next/image";
+"use client"
+
+import { useState } from "react"
+import { Sidebar } from "@/components/sidebar"
+import { Board } from "@/components/board"
+import { Eye } from "lucide-react"
+import { CreateBoardModal } from "@/components/create-board-modal"
+
+// Initial mock data
+const initialBoards = [
+  { id: "platform-launch", name: "Platform Launch" },
+  { id: "marketing-plan", name: "Marketing Plan" },
+  { id: "roadmap", name: "Roadmap" },
+]
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [isSidebarHidden, setIsSidebarHidden] = useState(false)
+  const [boards, setBoards] = useState(initialBoards)
+  const [activeBoard, setActiveBoard] = useState("platform-launch")
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const toggleSidebar = () => {
+    setIsSidebarHidden(!isSidebarHidden)
+  }
+
+  const handleCreateBoard = (name: string, columns: any[]) => {
+    // Create a URL-friendly ID from the name
+    const id = name.toLowerCase().replace(/\s+/g, "-")
+
+    // Add the new board
+    const newBoard = { id, name }
+    setBoards([...boards, newBoard])
+
+    // Set it as the active board
+    setActiveBoard(id)
+  }
+
+  // Find the active board
+  const currentBoard = boards.find((board) => board.id === activeBoard) || boards[0]
+
+  return (
+    <div className="flex h-full relative overflow-hidden w-full">
+      <Sidebar
+        boards={boards}
+        activeBoard={activeBoard}
+        onToggleSidebar={toggleSidebar}
+        isSidebarHidden={isSidebarHidden}
+        onCreateBoard={handleCreateBoard}
+        onBoardSelect={setActiveBoard}
+      />
+
+      <div
+        className={`flex-1 flex flex-col transition-all duration-300 ease-in-out w-full ${isSidebarHidden ? "ml-0" : "ml-64"}`}
+      >
+        {isSidebarHidden && (
+          <button
+            onClick={toggleSidebar}
+            className="fixed bottom-8 left-0 flex items-center justify-center w-14 h-12 bg-primary hover:bg-primary-light rounded-r-full text-white transition-colors z-10"
+            aria-label="Show Sidebar"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <Eye size={20} />
+          </button>
+        )}
+        <Board name={currentBoard.name} />
+      </div>
+
+      <CreateBoardModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onCreateBoard={handleCreateBoard}
+      />
     </div>
-  );
+  )
 }
+
