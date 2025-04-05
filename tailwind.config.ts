@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 const config = {
   darkMode: ["class"],
   content: [
@@ -24,18 +24,27 @@ const config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+
+        // Primary colors
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#635FC7",
+          light: "#A8A4FF",
+          foreground: "#FFFFFF",
         },
+
+        // Secondary colors
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
+
+        // Destructive colors
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "#EA5555",
+          light: "#FF9898",
+          foreground: "#FFFFFF",
         },
+
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
@@ -52,31 +61,28 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Primary colors
-        primary: "#635FC7",
-        "primary-light": "#A8A4FF",
 
         // Dark colors
-        "dark-1": "#000112",
-        "dark-2": "#20212C",
+        dark: {
+          1: "#000112",
+          2: "#20212C",
+        },
 
         // Medium colors
-        "medium-1": "#2B2C37",
-        "medium-2": "#3E3F4E",
+        medium: {
+          1: "#2B2C37",
+          2: "#3E3F4E",
+        },
 
         // Light colors
-        "light-1": "#828FA3",
-        "light-2": "#E4EBFA",
+        light: {
+          1: "#828FA3",
+          2: "#E4EBFA",
+        },
 
         // White/neutral
         "off-white": "#F4F7FD",
         white: "#FFFFFF",
-
-        // Accent colors
-        destructive: "#EA5555",
-        "destructive-light": "#FF9898",
-
-        // Semantic aliases for dark mode
       },
       fontFamily: {
         sans: ["var(--font-plus-jakarta-sans)", "sans-serif"],
@@ -119,7 +125,6 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
-
+export default config;
