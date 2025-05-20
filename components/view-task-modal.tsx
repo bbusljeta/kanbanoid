@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { MoreVertical } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -51,15 +51,21 @@ export function ViewTaskModal({
   onEditTask,
 }: ViewTaskModalProps) {
   const [status, setStatus] = useState(task?.columnId || "")
+  const [localSubtasks, setLocalSubtasks] = useState<Subtask[]>(task?.subtasks || [])
 
-  // Update status when task changes
-  if (task && task.columnId !== status) {
-    setStatus(task.columnId)
-  }
+  useEffect(() => {
+    if (task) {
+      setStatus(task.columnId)
+      setLocalSubtasks(task.subtasks)
+    } else {
+      // Reset when task is null (e.g., modal closed or no task selected)
+      setLocalSubtasks([])
+    }
+  }, [task]) // Resync when the entire task object changes
 
   if (!task) return null
 
-  const completedSubtasks = task.subtasks.filter((subtask) => subtask.completed).length
+  const completedSubtasks = localSubtasks.filter((subtask) => subtask.completed).length
 
   const handleStatusChange = (newStatus: string) => {
     setStatus(newStatus)
@@ -67,6 +73,12 @@ export function ViewTaskModal({
   }
 
   const handleSubtaskToggle = (subtaskId: string, checked: boolean) => {
+    // Update local state for immediate UI feedback
+    const updatedSubtasks = localSubtasks.map((subtask) =>
+      subtask.id === subtaskId ? { ...subtask, completed: checked } : subtask
+    )
+    setLocalSubtasks(updatedSubtasks)
+    // Propagate change to parent
     onUpdateSubtask(task.id, subtaskId, checked)
   }
 
@@ -130,10 +142,10 @@ export function ViewTaskModal({
         <div className="mt-6 space-y-4">
           <div className="space-y-3">
             <h3 className="body-l text-medium-2 dark:text-white">
-              Subtasks ({completedSubtasks} of {task.subtasks.length})
+              Subtasks ({completedSubtasks} of {localSubtasks.length})
             </h3>
             <div className="space-y-2">
-              {task.subtasks.map((subtask) => (
+              {localSubtasks.map((subtask) => (
                 <div
                   key={subtask.id}
                   className="flex items-center gap-4 p-3 bg-off-white dark:bg-dark-1 rounded-md"
