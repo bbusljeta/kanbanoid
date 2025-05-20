@@ -38,7 +38,14 @@ export function BoardColumn({ id, title, tasks, color, onTaskClick }: BoardColum
         </h2>
       </div>
 
-      <div ref={setNodeRef} className="space-y-5">
+      <div
+        ref={setNodeRef}
+        className="space-y-5 min-h-[150px] rounded-md transition-colors"
+        style={{
+          backgroundColor: tasks.length === 0 ? 'rgba(0, 0, 0, 0.05)' : 'transparent',
+          padding: tasks.length === 0 ? '8px' : '0px'
+        }}
+      >
         <SortableContext items={tasks.map((task) => task.id)} strategy={verticalListSortingStrategy}>
           {tasks.map((task) => (
             <TaskCard
@@ -50,6 +57,11 @@ export function BoardColumn({ id, title, tasks, color, onTaskClick }: BoardColum
             />
           ))}
         </SortableContext>
+        {tasks.length === 0 && (
+          <div className="h-[100px] w-full flex items-center justify-center text-light-1 text-sm">
+            Drop tasks here
+          </div>
+        )}
       </div>
     </div>
   )

@@ -25,12 +25,17 @@ import { BoardColumn } from "./board-column";
 import { EditTaskModal } from "./edit-task-modal";
 import { TaskCard } from "./task-card";
 import { ViewTaskModal } from "./view-task-modal";
+import { AddColumnModal } from "./add-column-modal";
+import { Task, Column } from "@/data/mock-data";
+import { useAtom } from "jotai";
 import {
-  initialTasks as defaultTasks,
-  initialColumns as defaultColumns,
-  Task,
-  Column,
-} from "@/data/mock-data";
+  activeBoardAtom,
+  activeBoardColumnsAtom,
+  tasksAtom,
+  boardsAtom,
+  activeBoardIdAtom,
+  addColumnAtom
+} from "@/lib/atoms";
 
 interface BoardProps {
   name: string;
@@ -43,13 +48,12 @@ export function Board({
   initialColumns = [],
   initialTasks = [],
 }: BoardProps) {
-  const [columns, setColumns] = useState<Column[]>(
-    initialColumns.length > 0 ? initialColumns : defaultColumns,
-  );
-
-  const [tasks, setTasks] = useState<Task[]>(
-    initialTasks.length > 0 ? initialTasks : defaultTasks,
-  );
+  const [activeBoard] = useAtom(activeBoardAtom);
+  const [columns, setColumns] = useAtom(activeBoardColumnsAtom);
+  const [tasks, setTasks] = useAtom(tasksAtom);
+  const [boards, setBoards] = useAtom(boardsAtom);
+  const [activeBoardId] = useAtom(activeBoardIdAtom);
+  const addColumn = useAtom(addColumnAtom)[1]; // Use the setter function
 
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
@@ -57,6 +61,7 @@ export function Board({
   const [isViewTaskModalOpen, setIsViewTaskModalOpen] = useState(false);
   const [editTask, setEditTask] = useState<Task | null>(null);
   const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false);
+  const [isAddColumnModalOpen, setIsAddColumnModalOpen] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -232,6 +237,23 @@ export function Board({
     setIsEditTaskModalOpen(true);
   };
 
+  const handleAddColumn = (name: string) => {
+    addColumn(name);
+  };
+
+  const getRandomColor = () => {
+    const colors = [
+      "bg-blue-400",
+      "bg-purple-400",
+      "bg-green-400",
+      "bg-yellow-400",
+      "bg-red-400",
+      "bg-indigo-400",
+      "bg-pink-400",
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
+
   const isEmptyBoard = columns.length === 0;
 
   return (
@@ -278,7 +300,11 @@ export function Board({
             <p className="body-l text-light-1 mb-6">
               This board is empty. Create a new column to get started.
             </p>
-            <Button variant="primary-l" className="flex items-center">
+            <Button
+              variant="primary-l"
+              className="flex items-center"
+              onClick={() => setIsAddColumnModalOpen(true)}
+            >
               <Plus className="mr-2 h-4 w-4" /> Add New Column
             </Button>
           </div>
@@ -301,14 +327,16 @@ export function Board({
                 />
               ))}
               <div className="min-w-[280px] flex-1 mt-[38px]">
-                <div className="flex items-center justify-center h-full bg-gradient-to-b from-[#E9EFFA] to-[#E9EFFA80] dark:from-[#828FA340] dark:to-[#828FA320] rounded-md cursor-pointer hover:text-primary transition-colors">
+                <button
+                  onClick={() => setIsAddColumnModalOpen(true)}
+                  className="flex items-center justify-center h-full w-full bg-gradient-to-b from-[#E9EFFA] to-[#E9EFFA80] dark:from-[#828FA340] dark:to-[#828FA320] rounded-md cursor-pointer hover:text-primary transition-colors">
                   <span className="text-[24px] text-light-1 font-bold">
                     + New Column
                   </span>
-                </div>
+                </button>
               </div>
             </div>
-            <DragOverlay>
+            <DragOverlay dropAnimation={{ duration: 200, easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)' }}>
               {activeTask && (
                 <TaskCard
                   id={activeTask.id}
@@ -345,6 +373,12 @@ export function Board({
         task={editTask}
         columns={columns}
         onUpdateTask={handleUpdateTask}
+      />
+
+      <AddColumnModal
+        isOpen={isAddColumnModalOpen}
+        onClose={() => setIsAddColumnModalOpen(false)}
+        onAddColumn={handleAddColumn}
       />
     </div>
   );
