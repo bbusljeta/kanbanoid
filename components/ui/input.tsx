@@ -4,13 +4,14 @@ import { cn } from "@/lib/utils"
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: boolean
-  errorMessage?: string
+  errorMessage?: string,
+  wrapperClassName?: string
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, error, errorMessage, ...props }, ref) => {
+  ({ className, type, error, errorMessage, wrapperClassName, ...props }, ref) => {
     return (
-      <div className="relative">
+      <div className={cn("relative", wrapperClassName)}>
         <input
           type={type}
           className={cn(
