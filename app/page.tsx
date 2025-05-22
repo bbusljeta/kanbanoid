@@ -1,56 +1,59 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Sidebar } from "@/components/sidebar"
-import { Board } from "@/components/board"
-import { Eye } from "lucide-react"
-import { CreateBoardModal } from "@/components/create-board-modal"
-
-// Initial mock data
-const initialBoards = [
-  { id: "platform-launch", name: "Platform Launch" },
-  { id: "marketing-plan", name: "Marketing Plan" },
-  { id: "roadmap", name: "Roadmap" },
-]
+import { useState } from "react";
+import { Sidebar } from "@/components/sidebar";
+import { Board } from "@/components/board";
+import { Eye } from "lucide-react";
+import { CreateBoardModal } from "@/components/create-board-modal";
+import { useAtom, useSetAtom } from "jotai";
+import {
+  boardsAtom,
+  activeBoardIdAtom,
+  activeBoardAtom,
+  addBoardAtom,
+} from "@/lib/atoms";
 
 export default function Home() {
-  const [isSidebarHidden, setIsSidebarHidden] = useState(false)
-  const [boards, setBoards] = useState(initialBoards)
-  const [activeBoard, setActiveBoard] = useState("platform-launch")
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [isSidebarHidden, setIsSidebarHidden] = useState(false);
+  const [boards] = useAtom(boardsAtom);
+  const [activeBoardId, setActiveBoardId] = useAtom(activeBoardIdAtom);
+  const [activeBoard] = useAtom(activeBoardAtom);
+  const addBoard = useSetAtom(addBoardAtom);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const toggleSidebar = () => {
-    setIsSidebarHidden(!isSidebarHidden)
-  }
+    setIsSidebarHidden(!isSidebarHidden);
+  };
 
   const handleCreateBoard = (name: string, columns: any[]) => {
-    // Create a URL-friendly ID from the name
-    const id = name.toLowerCase().replace(/\s+/g, "-")
+    // Add the new board with columns
+    const newBoard = {
+      name,
+      columns: columns.map(col => ({
+        id: col.name.toLowerCase().replace(/\s+/g, "-"),
+        title: col.name,
+        color: "bg-blue-400", // Default color, could be randomized
+      })),
+    };
 
-    // Add the new board
-    const newBoard = { id, name }
-    setBoards([...boards, newBoard])
-
-    // Set it as the active board
-    setActiveBoard(id)
-  }
-
-  // Find the active board
-  const currentBoard = boards.find((board) => board.id === activeBoard) || boards[0]
+    addBoard(newBoard);
+  };
 
   return (
     <div className="flex h-full relative overflow-hidden w-full">
       <Sidebar
         boards={boards}
-        activeBoard={activeBoard}
+        activeBoard={activeBoardId}
         onToggleSidebar={toggleSidebar}
         isSidebarHidden={isSidebarHidden}
         onCreateBoard={handleCreateBoard}
-        onBoardSelect={setActiveBoard}
+        onBoardSelect={setActiveBoardId}
       />
 
       <div
-        className={`flex-1 flex flex-col transition-all duration-300 ease-in-out w-full ${isSidebarHidden ? "ml-0" : "ml-64"}`}
+        className={`flex-1 flex flex-col transition-all duration-300 ease-in-out w-full ${
+          isSidebarHidden ? "ml-0" : "ml-64"
+        }`}
       >
         {isSidebarHidden && (
           <button
@@ -61,7 +64,7 @@ export default function Home() {
             <Eye size={20} />
           </button>
         )}
-        <Board name={currentBoard.name} />
+        {activeBoard && <Board name={activeBoard.name} />}
       </div>
 
       <CreateBoardModal
@@ -70,6 +73,5 @@ export default function Home() {
         onCreateBoard={handleCreateBoard}
       />
     </div>
-  )
+  );
 }
-
