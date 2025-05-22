@@ -132,7 +132,6 @@ export function AddTaskModal({ isOpen, onClose, onAddTask, columns }: AddTaskMod
                   onChange={(e) => handleSubtaskChange(subtask.id, e.target.value)}
                   placeholder="e.g. Make coffee"
                   className="flex-1 bg-transparent dark:bg-dark-2 border-light-2 dark:border-medium-2"
-                  wrapperClassName="w-full"
                 />
                 <button
                   type="button"
