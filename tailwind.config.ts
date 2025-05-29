@@ -24,27 +24,20 @@ const config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-
-        // Primary colors
         primary: {
           DEFAULT: "#635FC7",
           light: "#A8A4FF",
           foreground: "#FFFFFF",
         },
-
-        // Secondary colors
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
-
-        // Destructive colors
         destructive: {
           DEFAULT: "#EA5555",
           light: "#FF9898",
           foreground: "#FFFFFF",
         },
-
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
@@ -61,28 +54,30 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-
-        // Dark colors
         dark: {
-          1: "#000112",
-          2: "#20212C",
+          "1": "#000112",
+          "2": "#20212C",
         },
-
-        // Medium colors
         medium: {
-          1: "#2B2C37",
-          2: "#3E3F4E",
+          "1": "#2B2C37",
+          "2": "#3E3F4E",
         },
-
-        // Light colors
         light: {
-          1: "#828FA3",
-          2: "#E4EBFA",
+          "1": "#828FA3",
+          "2": "#E4EBFA",
         },
-
-        // White/neutral
         "off-white": "#F4F7FD",
         white: "#FFFFFF",
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar-background))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          primary: "hsl(var(--sidebar-primary))",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+          accent: "hsl(var(--sidebar-accent))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+          border: "hsl(var(--sidebar-border))",
+          ring: "hsl(var(--sidebar-ring))",
+        },
       },
       fontFamily: {
         sans: ["var(--font-plus-jakarta-sans)", "sans-serif"],
@@ -110,12 +105,20 @@ const config = {
       },
       keyframes: {
         "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+          from: {
+            height: "0",
+          },
+          to: {
+            height: "var(--radix-accordion-content-height)",
+          },
         },
         "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          from: {
+            height: "var(--radix-accordion-content-height)",
+          },
+          to: {
+            height: "0",
+          },
         },
       },
       animation: {
