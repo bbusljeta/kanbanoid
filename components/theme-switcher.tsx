@@ -24,10 +24,10 @@ export function ThemeSwitcher() {
   // Avoid hydration mismatch by returning a skeleton or null until mounted
   if (!mounted) {
     return (
-      <div className="flex items-center justify-center gap-4 p-4 mx-6 my-4 bg-off-white dark:bg-dark-2 rounded-md">
-        <div className="w-5 h-5"></div>
-        <div className="w-11 h-6 bg-light-2 rounded-full"></div>
-        <div className="w-5 h-5"></div>
+      <div className="flex items-center justify-center gap-4 p-2 mx-2 my-2 bg-sidebar-accent/50 rounded-md">
+        <div className="w-4 h-4"></div>
+        <div className="w-9 h-5 bg-sidebar-border rounded-full"></div>
+        <div className="w-4 h-4"></div>
       </div>
     );
   }
@@ -40,8 +40,8 @@ export function ThemeSwitcher() {
   };
 
   return (
-    <div className="flex items-center justify-center gap-4 p-4 mx-6 my-4 bg-off-white dark:bg-dark-2 rounded-md">
-      <Sun size={20} className="text-light-1" />
+    <div className="flex items-center justify-center gap-4 p-2 mx-2 my-2 bg-sidebar-accent/50 rounded-md">
+      <Sun size={16} className="text-sidebar-foreground/70" />
       <label className="relative inline-flex items-center cursor-pointer">
         <input
           type="checkbox"
@@ -49,9 +49,9 @@ export function ThemeSwitcher() {
           checked={isChecked}
           onChange={toggleTheme}
         />
-        <div className="w-11 h-6 bg-primary peer-focus:outline-none rounded-full peer dark:bg-primary peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+        <div className="w-9 h-5 bg-sidebar-border peer-focus:outline-none rounded-full peer dark:bg-sidebar-border peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
       </label>
-      <Moon size={20} className="text-light-1" />
+      <Moon size={16} className="text-sidebar-foreground/70" />
     </div>
   );
 }
