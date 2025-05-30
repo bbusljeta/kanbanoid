@@ -53,7 +53,7 @@ export function AppSidebar({
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {boards.map(board => (
+                {boards.map((board) => (
                   <SidebarMenuItem key={board.id}>
                     <SidebarMenuButton
                       asChild
@@ -100,7 +100,7 @@ export function AppSidebar({
             </button>
           </div>
         </SidebarFooter>
-        <SidebarRail />
+        {/*  <SidebarRail /> */}
       </Sidebar>
 
       <CreateBoardModal
