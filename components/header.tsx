@@ -1,4 +1,4 @@
-import { Eye, Plus, MoreVertical } from "lucide-react";
+import { Plus, MoreVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -6,26 +6,38 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import clsx from "clsx";
+import { useAtomValue } from "jotai";
+import { sidebarOpenAtom } from "@/lib/atoms";
 
 type Props = {
   activeBoard?: { name: string };
   setIsAddTaskModalOpen: (open: boolean) => void;
 };
 export function Header({ activeBoard, setIsAddTaskModalOpen }: Props) {
+  const open = useAtomValue(sidebarOpenAtom);
+
   return (
-    <header className="flex items-center px-4 py-4 gap-6 border-b border-light-2 dark:border-medium-1 bg-white dark:bg-medium-1 w-full z-20 shrink-0">
-      <div className="flex items-center gap-2 w-full max-w-[240px] border-r border-r-light-2">
-        <div className="flex space-x-0.5">
-          <div className="h-6 w-1.5 bg-primary/80 rounded-sm"></div>
-          <div className="h-6 w-1.5 bg-primary rounded-sm"></div>
-          <div className="h-6 w-1.5 bg-primary/80 rounded-sm"></div>
+    <header className="flex items-center bg-white dark:bg-medium-1 w-full z-20 shrink-0">
+      <div
+        className={clsx(
+          "w-full h-full max-w-[256px] border-r border-light-2 dark:border-medium-2",
+          !open && "border-b border-light-2 dark:border-medium-2"
+        )}
+      >
+        <div className="flex items-center gap-2 w-full px-4 py-4">
+          <div className="flex space-x-0.5">
+            <div className="h-6 w-1.5 bg-primary/80 rounded-sm"></div>
+            <div className="h-6 w-1.5 bg-primary rounded-sm"></div>
+            <div className="h-6 w-1.5 bg-primary/80 rounded-sm"></div>
+          </div>
+          <span className="text-xl font-bold text-sidebar-foreground">
+            kanban
+          </span>
         </div>
-        <span className="text-xl font-bold text-sidebar-foreground">
-          kanban
-        </span>
       </div>
 
-      <div className="flex justify-between items-center w-full">
+      <div className="flex justify-between items-center w-full px-6 py-4 border-b border-light-2 dark:border-medium-2">
         <h1 className="heading-xl text-dark-1 dark:text-white">
           {activeBoard?.name || "Select a Board"}
         </h1>

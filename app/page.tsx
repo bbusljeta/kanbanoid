@@ -13,24 +13,19 @@ import {
   addBoardAtom,
   activeBoardColumnsAtom,
   tasksAtom,
+  sidebarOpenAtom,
 } from "@/lib/atoms";
 import {
   SidebarProvider,
   SidebarInset,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Eye, Plus, MoreVertical } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Eye } from "lucide-react";
 import { Header } from "@/components/header";
 
 function CustomSidebarTrigger() {
-  const { open, toggleSidebar, isMobile } = useSidebar();
+  const { open, toggleSidebar, isMobile, state } = useSidebar();
+  const [_, setIsOpen] = useAtom(sidebarOpenAtom);
 
   // Don't show the trigger when sidebar is open
   if (open && !isMobile) {
@@ -39,7 +34,10 @@ function CustomSidebarTrigger() {
 
   return (
     <button
-      onClick={toggleSidebar}
+      onClick={() => {
+        toggleSidebar();
+        setIsOpen(true);
+      }}
       className="fixed bottom-8 left-0 flex items-center justify-center w-14 h-12 bg-primary hover:bg-primary/90 rounded-r-full text-white transition-colors z-10 shadow-lg"
       aria-label="Show Sidebar"
     >
@@ -104,7 +102,6 @@ export default function Home() {
         setIsAddTaskModalOpen={setIsAddTaskModalOpen}
       />
 
-      {/* Main Layout with Sidebar and Content */}
       <div className="flex flex-1 overflow-hidden">
         <div className="relative flex w-full h-full">
           <SidebarProvider defaultOpen={true}>
