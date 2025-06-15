@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Eye, EyeOff, LayoutGrid, Plus } from "lucide-react";
+import { EyeOff, LayoutGrid, Plus } from "lucide-react";
 import Link from "next/link";
 import {
   Sidebar,
@@ -10,11 +10,9 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { ThemeSwitcher } from "./theme-switcher";
@@ -61,7 +59,7 @@ export function AppSidebar({
                     <SidebarMenuButton
                       asChild
                       isActive={activeBoard === board.id}
-                      className="w-full data-[active=true]:bg-primary data-[active=true]:text-white"
+                      className="w-full px-6 py-4 h-12 data-[active=true]:bg-primary data-[active=true]:text-white rounded-r-full"
                     >
                       <Link
                         href={`#${board.id}`}
