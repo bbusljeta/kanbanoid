@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Eye, EyeOff, LayoutGrid, Plus } from "lucide-react";
+import { EyeOff, LayoutGrid, Plus } from "lucide-react";
 import Link from "next/link";
 import {
   Sidebar,
@@ -10,15 +10,15 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { ThemeSwitcher } from "./theme-switcher";
 import { CreateBoardModal } from "./create-board-modal";
+import { useAtom } from "jotai";
+import { sidebarOpenAtom } from "@/lib/atoms";
 
 interface Board {
   id: string;
@@ -38,12 +38,13 @@ export function AppSidebar({
   onCreateBoard,
   onBoardSelect,
 }: AppSidebarProps) {
-  const { open, toggleSidebar, isMobile } = useSidebar();
+  const { toggleSidebar } = useSidebar();
+  const [_, setIsOpen] = useAtom(sidebarOpenAtom);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   return (
     <>
-      <Sidebar variant="sidebar">
+      <Sidebar className="peer" variant="sidebar">
         {/* <SidebarHeader></SidebarHeader> */}
 
         <SidebarContent>
@@ -53,12 +54,12 @@ export function AppSidebar({
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {boards.map(board => (
+                {boards.map((board) => (
                   <SidebarMenuItem key={board.id}>
                     <SidebarMenuButton
                       asChild
                       isActive={activeBoard === board.id}
-                      className="w-full data-[active=true]:bg-primary data-[active=true]:text-white"
+                      className="w-full px-6 py-4 h-12 data-[active=true]:bg-primary data-[active=true]:text-white rounded-r-full"
                     >
                       <Link
                         href={`#${board.id}`}
@@ -92,15 +93,18 @@ export function AppSidebar({
           <div className="p-2 flex-col gap-4">
             <ThemeSwitcher />
             <button
-              onClick={toggleSidebar}
+              onClick={() => {
+                toggleSidebar();
+                setIsOpen(false);
+              }}
               className="flex items-center gap-2 text-light-1 hover:text-primary px-6 py-4 w-full body-l"
             >
-              {open ? <EyeOff size={18} /> : <Eye size={18} />}
-              <span>{open ? "Hide Sidebar" : "Show Sidebar"}</span>
+              <EyeOff size={18} />
+              <span>{"Hide Sidebar"}</span>
             </button>
           </div>
         </SidebarFooter>
-        <SidebarRail />
+        {/*  <SidebarRail /> */}
       </Sidebar>
 
       <CreateBoardModal
