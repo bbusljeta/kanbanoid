@@ -113,6 +113,54 @@ export const addColumnAtom = atom(
   }
 );
 
+// Atom for updating the active board
+export const updateBoardAtom = atom(
+  null,
+  (get, set, updatedBoard: { name: string, columns: Column[] }) => {
+    const boards = get(boardsAtom);
+    const activeBoardId = get(activeBoardIdAtom);
+
+    // Update the board with new data
+    const updatedBoards = boards.map((board: Board) =>
+      board.id === activeBoardId
+        ? { ...board, name: updatedBoard.name, columns: updatedBoard.columns }
+        : board
+    );
+
+    // Update the boards atom
+    set(boardsAtom, updatedBoards);
+  }
+);
+
+// Atom for deleting a board
+export const deleteBoardAtom = atom(
+  null,
+  (get, set, boardIdToDelete: string) => {
+    const boards = get(boardsAtom);
+    const activeBoardId = get(activeBoardIdAtom);
+    const tasks = get(tasksAtom);
+
+    // Remove the board
+    const updatedBoards = boards.filter((board: Board) => board.id !== boardIdToDelete);
+
+    // Update the boards atom
+    set(boardsAtom, updatedBoards);
+
+    // If we deleted the active board, set a new active board
+    if (activeBoardId === boardIdToDelete && updatedBoards.length > 0) {
+      set(activeBoardIdAtom, updatedBoards[0].id);
+    }
+
+    // Remove tasks associated with the deleted board columns
+    const deletedBoard = boards.find((board: Board) => board.id === boardIdToDelete);
+    if (deletedBoard) {
+      const deletedColumnIds = deletedBoard.columns.map((col: Column) => col.id);
+      const updatedTasks = tasks.filter((task: Task) => !deletedColumnIds.includes(task.columnId));
+      set(tasksAtom, updatedTasks);
+    }
+  }
+);
+
 // Derived atom for tasks filtered by active board
 export const activeBoardTasksAtom = atom(
   (get) => {
